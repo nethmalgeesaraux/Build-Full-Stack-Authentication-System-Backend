@@ -6,7 +6,9 @@ import ed.nethmal.authify.io.ProfileResponse;
 import ed.nethmal.authify.repository.UserRepostory;
 import ed.nethmal.authify.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -19,8 +21,15 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileResponse createProfile(ProfileRequest request) {
         UserEntity newProfile = convertToUserEntity(request);
-        newProfile = userRepostory.save(newProfile);
-        return convertToUserResponse(newProfile);
+
+        if(!userRepostory.existsByEmail(request.getEmail())) {
+            newProfile = userRepostory.save(newProfile);
+            return convertToUserResponse(newProfile);
+
+        }
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+
+
     }
 
     private ProfileResponse convertToUserResponse(UserEntity newProfile) {
