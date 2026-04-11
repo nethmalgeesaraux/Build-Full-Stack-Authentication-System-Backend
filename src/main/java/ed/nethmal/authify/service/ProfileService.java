@@ -1,9 +1,9 @@
 package ed.nethmal.authify.service;
 
-import ed.nethmal.authify.io.UserRequest;
-import ed.nethmal.authify.io.UserResponse;
+import ed.nethmal.authify.io.ProfileRequest;
+import ed.nethmal.authify.io.ProfileResponse;
 
 public interface ProfileService {
 
-    UserResponse createProfile(UserRequest request);
+    ProfileResponse createProfile(ProfileRequest request);
 }

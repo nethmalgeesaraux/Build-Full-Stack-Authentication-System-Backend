@@ -1,8 +1,8 @@
 package ed.nethmal.authify.service.Impl;
 
 import ed.nethmal.authify.entity.UserEntity;
-import ed.nethmal.authify.io.UserRequest;
-import ed.nethmal.authify.io.UserResponse;
+import ed.nethmal.authify.io.ProfileRequest;
+import ed.nethmal.authify.io.ProfileResponse;
 import ed.nethmal.authify.repository.UserRepostory;
 import ed.nethmal.authify.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +17,14 @@ public class ProfileServiceImpl implements ProfileService {
     private final UserRepostory userRepostory;
 
     @Override
-    public UserResponse createProfile(UserRequest request) {
+    public ProfileResponse createProfile(ProfileRequest request) {
         UserEntity newProfile = convertToUserEntity(request);
         newProfile = userRepostory.save(newProfile);
         return convertToUserResponse(newProfile);
     }
 
-    private UserResponse convertToUserResponse(UserEntity newProfile) {
-        return UserResponse.builder()
+    private ProfileResponse convertToUserResponse(UserEntity newProfile) {
+        return ProfileResponse.builder()
                 .name(newProfile.getName())
                 .email(newProfile.getEmail())
                 .userId(newProfile.getUserId())
@@ -32,7 +32,7 @@ public class ProfileServiceImpl implements ProfileService {
                 .build();
     }
 
-    private UserEntity convertToUserEntity(UserRequest request) {
+    private UserEntity convertToUserEntity(ProfileRequest request) {
         return UserEntity.builder()
                 .email(request.getEmail())
                 .userId(UUID.randomUUID().toString())
