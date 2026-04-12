@@ -1,5 +1,6 @@
 package ed.nethmal.authify.config;
 
+
 import ed.nethmal.authify.service.AppUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -71,10 +72,10 @@ public class SecurityConfig {
         return source;
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(appUserDetailsService);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(appUserDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(List.of(authProvider));
     }
