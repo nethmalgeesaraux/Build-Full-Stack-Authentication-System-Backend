@@ -36,11 +36,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/login",
-                                "/register",
-                                "/send-reset-otp",
-                                "/reset-password",
-                                "/logout"
+                                "/api/login",
+                                "/api/profile/register",
+                                "/api/send-reset-otp",
+                                "/api/reset-password",
+                                "/api/logout"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -74,11 +74,15 @@ public class SecurityConfig {
 
 
     @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider =
+                new DaoAuthenticationProvider(appUserDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
+    }
+
+    @Bean
     public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(appUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return new ProviderManager(List.of(authProvider));
+        return new ProviderManager(daoAuthenticationProvider());
     }
 }
-
-
