@@ -7,6 +7,7 @@ import ed.nethmal.authify.repository.UserRepostory;
 import ed.nethmal.authify.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,6 +34,14 @@ public class ProfileServiceImpl implements ProfileService {
 
 
     }
+
+    @Override
+    public ProfileResponse getProfile(String email) {
+        UserEntity existingUser = userRepostory.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        return convertToUserResponse(existingUser);
+    }
+
 
     private ProfileResponse convertToUserResponse(UserEntity newProfile) {
         return ProfileResponse.builder()
