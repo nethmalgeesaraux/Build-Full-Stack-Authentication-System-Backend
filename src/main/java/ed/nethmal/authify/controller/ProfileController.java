@@ -2,6 +2,7 @@ package ed.nethmal.authify.controller;
 
 import ed.nethmal.authify.io.ProfileRequest;
 import ed.nethmal.authify.io.ProfileResponse;
+import ed.nethmal.authify.service.EmailService;
 import ed.nethmal.authify.service.ProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final EmailService emailService;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public ProfileResponse register(@Valid @RequestBody ProfileRequest request) {
+        emailService.sendWelcomeEmail(request.getEmail(), request.getName());
         return profileService.createProfile(request);
     }
 
