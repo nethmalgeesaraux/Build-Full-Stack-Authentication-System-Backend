@@ -23,4 +23,14 @@ public class EmailService {
         message.setText("Hello " + name + ",\n\nThanks for registering with us!\n\nRegards,\n\nAuthify Team");
     }
 
+    public void sendResetOtpEmail(String toEmail, String otp) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(toEmail);
+        message.setSubject("Password Reset OTP");
+        message.setText("Your OTP for resetting your password is " + otp + ".\n\nThis OTP is valid for 15 minutes.\n\nRegards,\n\nAuthify Team");
+        mailSender.send(message);
+    }
+
+
 }

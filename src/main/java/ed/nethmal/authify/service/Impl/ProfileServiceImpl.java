@@ -4,6 +4,7 @@ import ed.nethmal.authify.entity.UserEntity;
 import ed.nethmal.authify.io.ProfileRequest;
 import ed.nethmal.authify.io.ProfileResponse;
 import ed.nethmal.authify.repository.UserRepostory;
+import ed.nethmal.authify.service.EmailService;
 import ed.nethmal.authify.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final UserRepostory userRepostory;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public ProfileResponse createProfile(ProfileRequest request) {
@@ -61,11 +63,11 @@ public class ProfileServiceImpl implements ProfileService {
         //save into the database
         userRepostory.save(existingEntity);
 
-//        try {
-//
-//        }catch (Exception e) {
-//            throw new RuntimeException("Unable to send email");
-//        }
+        try {
+            emailService.sendResetOtpEmail(existingEntity.getEmail(), otp);
+        }catch (Exception e) {
+            throw new RuntimeException("Unable to send email");
+        }
 
     }
 
