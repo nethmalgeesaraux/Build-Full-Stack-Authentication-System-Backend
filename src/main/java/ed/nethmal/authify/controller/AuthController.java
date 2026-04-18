@@ -3,6 +3,7 @@ package ed.nethmal.authify.controller;
 import ed.nethmal.authify.io.AuthRequest;
 import ed.nethmal.authify.io.AuthResponse;
 import ed.nethmal.authify.service.AppUserDetailsService;
+import ed.nethmal.authify.service.ProfileService;
 import ed.nethmal.authify.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -29,6 +31,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final AppUserDetailsService appUserDetailsService;
     private final JwtUtil jwtUtil;
+    private final ProfileService profileService;
 
 
     @PostMapping("/login")
@@ -80,6 +83,16 @@ public class AuthController {
     public ResponseEntity<Boolean> isAuthenticated(@CurrentSecurityContext(expression = "authentication?.name")String email) {
         return ResponseEntity.ok(email != null);
     }
+
+    @PostMapping("/send-reset-otp")
+    public void sendRestOtp(@RequestParam String email){
+        try {
+            profileService.sendRestOtp(email);
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
