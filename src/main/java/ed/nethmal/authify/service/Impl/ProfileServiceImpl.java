@@ -71,6 +71,26 @@ public class ProfileServiceImpl implements ProfileService {
 
     }
 
+    @Override
+    public void restPassword(String email, String otp, String newPassword) {
+        UserEntity existingEntity = userRepostory.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+
+        if(existingEntity.getResetOtp() == null || !existingEntity.getResetOtp().equals(otp)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid OTP");
+        }
+
+        if(System.currentTimeMillis() > existingEntity.getResetOtpExpireAt()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "OTP has expired");
+        }
+
+        existingEntity.setPassword(passwordEncoder.encode(newPassword));
+        existingEntity.setResetOtp(null);
+        existingEntity.setResetOtpExpireAt(0L);
+
+        userRepostory.save(existingEntity);
+    }
+
 
     private ProfileResponse convertToUserResponse(UserEntity newProfile) {
         return ProfileResponse.builder()

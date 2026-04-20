@@ -94,18 +94,18 @@ public class AuthController {
     }
 
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        ResponseCookie cookie = ResponseCookie.from("jwt", "")
-                .httpOnly(true)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Strict")
-                .build();
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(Map.of("message", "Logged out successfully"));
-    }
+//    @PostMapping("/logout")
+//    public ResponseEntity<?> logout() {
+//        ResponseCookie cookie = ResponseCookie.from("jwt", "")
+//                .httpOnly(true)
+//                .path("/")
+//                .maxAge(0)
+//                .sameSite("Strict")
+//                .build();
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+//                .body(Map.of("message", "Logged out successfully"));
+//    }
 
 
 }
