@@ -92,12 +92,31 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void sendOtp(String userId) {
+    public void sendOtp(String email) {
+        UserEntity existingEntity = userRepostory.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+
+        if(existingEntity.getIsAccountVerified() != null && existingEntity.getIsAccountVerified()) {
+            return;
+        }
+
+        //Generate 6 digit otp
+        String otp = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
+
+        //calculate expiry time (current time + 24 h in milliseconds)
+        long expiryTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000);
+
+        existingEntity.setVerifyOtp(otp);
+        existingEntity.setVerifyOtpExpireAt(expiryTime);
+
+        //Save
+        userRepostory.save(existingEntity);
+
 
     }
 
     @Override
-    public void verifyOtp(String userId, String otp) {
+    public void verifyOtp(String email, String otp) {
 
 
     }
