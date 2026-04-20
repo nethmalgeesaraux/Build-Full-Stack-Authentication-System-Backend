@@ -91,6 +91,24 @@ public class ProfileServiceImpl implements ProfileService {
         userRepostory.save(existingEntity);
     }
 
+    @Override
+    public void sendOtp(String userId) {
+
+    }
+
+    @Override
+    public void verifyOtp(String userId, String otp) {
+
+
+    }
+
+    @Override
+    public String getLoggedInUserId(String email) {
+        UserEntity existingEntity = userRepostory.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        return existingEntity.getUserId();
+    }
+
 
     private ProfileResponse convertToUserResponse(UserEntity newProfile) {
         return ProfileResponse.builder()

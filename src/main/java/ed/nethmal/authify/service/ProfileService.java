@@ -12,4 +12,11 @@ public interface ProfileService {
     void sendRestOtp(String email);
 
     void restPassword(String email, String otp, String newPassword);
+
+    void sendOtp(String userId);
+
+    void verifyOtp(String userId, String otp);
+
+    String getLoggedInUserId(String email);
+
 }
