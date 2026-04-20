@@ -144,12 +144,12 @@ public class ProfileServiceImpl implements ProfileService {
 
     }
 
-    @Override
-    public String getLoggedInUserId(String email) {
-        UserEntity existingEntity = userRepostory.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
-        return existingEntity.getUserId();
-    }
+//    @Override
+//    public String getLoggedInUserId(String email) {
+//        UserEntity existingEntity = userRepostory.findByEmail(email)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+//        return existingEntity.getUserId();
+//    }
 
 
     private ProfileResponse convertToUserResponse(UserEntity newProfile) {
