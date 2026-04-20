@@ -112,6 +112,13 @@ public class ProfileServiceImpl implements ProfileService {
         //Save
         userRepostory.save(existingEntity);
 
+        try {
+            emailService.sendOtpEmail(existingEntity.getEmail(), otp);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to send email");
+        }
+
+
 
     }
 
