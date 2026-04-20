@@ -2,9 +2,11 @@ package ed.nethmal.authify.controller;
 
 import ed.nethmal.authify.io.AuthRequest;
 import ed.nethmal.authify.io.AuthResponse;
+import ed.nethmal.authify.io.RestPasswordRequest;
 import ed.nethmal.authify.service.AppUserDetailsService;
 import ed.nethmal.authify.service.ProfileService;
 import ed.nethmal.authify.util.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -94,7 +96,12 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public void resetPassword() {
+    public void resetPassword(@Valid @RequestBody RestPasswordRequest request) {
+        try {
+            profileService.restPassword(request.getEmail(), request.getOtp(), request.getNewPassword());
+        }catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
 
     }
 
